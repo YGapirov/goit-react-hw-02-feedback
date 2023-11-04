@@ -17,6 +17,8 @@ export class App extends Component {
     }));
   };
 
+  countTotalFeedback;
+
   render() {
     return (
       <Container>
