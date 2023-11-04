@@ -17,7 +17,7 @@ export class App extends Component {
     }));
   };
 
-  countTotalFeedback;
+  // countTotalFeedback;
 
   render() {
     return (
