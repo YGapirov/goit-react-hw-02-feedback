@@ -1,6 +1,10 @@
 import { GlobalStyle } from '../GlobalStyle';
 import { Component } from 'react';
 import { Container } from './App.styled';
+import { Section } from '../Section/Section';
+import { FeedbackOptions } from '../FeedbackOptions/Feedbackoptions';
+import { Statistics } from '../Statistics/Statistics';
+import { Notification } from '../Notification/Notification';
 
 export class App extends Component {
   state = {
@@ -9,29 +13,57 @@ export class App extends Component {
     bad: 0,
   };
 
-  //викликаємо публічну фу-цію і отримуєму type відгуку
+  //викликаємо публічну фу-цію
 
-  updateFeedback = type => {
-    this.setState(prevState => ({
-      [type]: prevState[type] + 1,
-    }));
+  updateFeedback = e => {
+    const targetValue = e.target.textContent.toLowerCase();
+
+    this.setState(prevState => {
+      return {
+        [targetValue]: prevState[targetValue] + 1,
+      };
+    });
   };
 
-  // countTotalFeedback;
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    return good + neutral + bad;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    const total = this.countTotalFeedback();
+    const { good } = this.state;
+    return Math.round((good / total) * 100);
+  };
 
   render() {
+    const total = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
+    const { good, neutral, bad } = this.state;
+
     return (
       <Container>
-        <h1>Please leave feedback</h1>
-        <button onClick={() => this.updateFeedback('good')}>Good</button>
-        <button onClick={() => this.updateFeedback('neutral')}>Neutral</button>
-        <button onClick={() => this.updateFeedback('bad')}>Bad</button>
-        <div>
-          <h2>Statistics</h2>
-          <p>Good: {this.state.good}</p>
-          <p>Neutral: {this.state.neutral}</p>
-          <p>Bad: {this.state.bad}</p>
-        </div>
+        <Section title="Please leave feedback">
+          <FeedbackOptions
+            onLeaveFeedback={this.updateFeedback}
+            options={['Good', 'Neutral', 'Bad']}
+          />
+        </Section>
+
+        <Section title="Statistics">
+          {total > 0 ? (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positivePercentage={positivePercentage}
+            />
+          ) : (
+            <Notification message="There is no feedback" />
+          )}
+        </Section>
+
         <GlobalStyle />
       </Container>
     );
