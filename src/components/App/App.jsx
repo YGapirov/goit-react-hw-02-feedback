@@ -15,15 +15,22 @@ export class App extends Component {
 
   //викликаємо публічну фу-цію
 
-  updateFeedback = e => {
-    const targetValue = e.target.textContent.toLowerCase();
+  // updateFeedback = e => {
+  //   const targetValue = e.target.textContent.toLowerCase();
 
-    this.setState(prevState => {
-      return {
-        [targetValue]: prevState[targetValue] + 1,
-      };
-    });
-  };
+  //   this.setState(prevState => {
+  //     return {
+  //       [targetValue]: prevState[targetValue] + 1,
+  //     };
+  //   });
+  // };
+  updateFeedback = (feedback) => {
+  this.setState((prevState) => {
+    return {
+      [feedback]: prevState[feedback] + 1,
+    };
+  });
+};
 
   countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
@@ -46,7 +53,7 @@ export class App extends Component {
         <Section title="Please leave feedback">
           <FeedbackOptions
             onLeaveFeedback={this.updateFeedback}
-            options={['Good', 'Neutral', 'Bad']}
+            options={['good', 'neutral', 'bad']}
           />
         </Section>
 
